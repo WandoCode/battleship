@@ -34,8 +34,17 @@ describe("Player IA", () => {
   });
 
   for (let i = 0; i < 100; i++) {
-    test("IA don't shoot coord already fired", () => {
+    test("IA don't shoot the same coord twice", () => {
       expect(enemyBoard.isNotAlreadyFired(player.IAChooseCoord())).toBeTruthy();
+    });
+  }
+  for (let i = 0; i < 100; i++) {
+    test("IA never shoot outside the board", () => {
+      let pos = player.IAChooseCoord();
+      expect(pos[0]).toBeGreaterThanOrEqual(0);
+      expect(pos[0]).toBeLessThan(10);
+      expect(pos[1]).toBeGreaterThanOrEqual(0);
+      expect(pos[1]).toBeLessThan(10);
     });
   }
 });
