@@ -1,4 +1,4 @@
-import { drawABoard, drawShipsOnBoard } from "./display";
+import { drawABoard, drawShipsOnBoard, listenBoard } from "./display";
 import { Game } from "./gameHelper";
 import "./styles.css";
 
@@ -14,18 +14,22 @@ let body = document.querySelector("body");
 const game = new Game(BOARD_DIMENSION);
 game.initGame("Max", "PC", true);
 
-// Draw the inital board player A
+// Draw the inital board foar both player
 drawABoard(BOARD_DIMENSION, body, "game-board", boardIDplayerA);
+drawABoard(BOARD_DIMENSION, body, "game-board", boardIDplayerB);
+
+// Initialize the playerA board
 game.addShipsRdmly(SHIPS);
-drawShipsOnBoard(game.currentPlayer.board, boardIDplayerA);
+drawShipsOnBoard(game.currentPlayer.enemyBoard, boardIDplayerB);
+//Listen the board of the other player as the player play on the other player board
+listenBoard(boardIDplayerB, game.currentPlayer);
 
 // Change player to put his ships
 game.nextPlayer();
 
-// Draw the inital board player B
-drawABoard(BOARD_DIMENSION, body, "game-board", boardIDplayerB);
+// Initialize the playerA board
 game.addShipsRdmly(SHIPS);
-drawShipsOnBoard(game.currentPlayer.board, boardIDplayerB);
+drawShipsOnBoard(game.currentPlayer.enemyBoard, boardIDplayerA);
 
 // Change player: he is ready to play
 game.nextPlayer();

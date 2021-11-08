@@ -13,6 +13,9 @@ table.game-board {
 
 table.game-board td {
   border: 1px solid black;
+}
+
+table.game-board div {
   width: 35px;
   height: 35px;
 }

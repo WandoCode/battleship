@@ -14,8 +14,8 @@ export const Game = function (dimension) {
     let playWithIA = IA || false;
     const boardA = new Gameboard(this.dimension);
     const boardB = new Gameboard(this.dimension);
-    const playerA = new Player(playerAName, boardA);
-    const playerB = new Player(playerBName, boardB, playWithIA);
+    const playerA = new Player(playerAName, boardB);
+    const playerB = new Player(playerBName, boardA, playWithIA);
     this.players = [playerA, playerB];
     this.setFirstPlayer(1);
   };
@@ -44,7 +44,11 @@ export const Game = function (dimension) {
 
   /* Return if the game is done */
   this.checkGameOver = () => {
-    if (this.boardA.noLivingShips || this.boardA.noLivingShips) return true;
+    if (
+      this.players[0].enemyBoard.noLivingShips ||
+      this.players[1].enemyBoard.noLivingShips
+    )
+      return true;
     return false;
   };
 
@@ -87,7 +91,7 @@ export const Game = function (dimension) {
             shipCoord = this.rdmCoord();
             shipDir = this.chooseRdmDirection();
             // Try to pu the ship on the board
-            shipIsOnTheBoard = this.currentPlayer.board.putShip(
+            shipIsOnTheBoard = this.currentPlayer.enemyBoard.putShip(
               newShip,
               shipCoord,
               shipDir
