@@ -61,7 +61,7 @@ export const Gameboard = function (dimension) {
     }
   };
 
-  /* Check if the given coord fit in the matrice */
+  /* Check if the given coord are valid to put a ship */
   this.shipFit = (shipCoordinates) => {
     let itsOkay = true;
     shipCoordinates.forEach((pos) => {
@@ -163,6 +163,7 @@ export const makeABoard = (n) => {
   return matrice;
 };
 
+/* Check if the pos is in the matrice with dimension nxn */
 const coordIsInMatrice = (pos, dimension) => {
   const x = pos[0];
   const y = pos[1];

@@ -1,7 +1,16 @@
-import { Gameboard, giveShipCoordinates } from "./gameboard";
+import { Gameboard } from "./gameboard";
 import { MakeShip } from "./ship";
+import { Player } from "./player";
+import Game from "./gameHelper";
 
-let ship = new MakeShip(4);
-let board = new Gameboard(3);
+let BOARD_DIMENSION = 10;
 
-board.putShip(ship, [2, 2], [0, 1]);
+// Initialize game
+const game = new Game();
+game.initGame("Max", "PC", BOARD_DIMENSION, true);
+
+let playing = false;
+let currentPlayer = 0;
+while (playing) {
+  playing = game.checkGameOver();
+}
