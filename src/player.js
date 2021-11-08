@@ -1,9 +1,9 @@
-export const Player = function (name, enemyBoard, IA) {
+export const Player = function (name, board, IA) {
   /* A player that can fired on the ennemy board. 
     IA=true to make a player with automatic play choice */
 
   this.name = name;
-  this.enemyBoard = enemyBoard;
+  this.board = board;
   this.IA = IA || false;
 
   this.play = (pos) => {
@@ -14,7 +14,7 @@ export const Player = function (name, enemyBoard, IA) {
       pos = this.IAChooseCoord();
     }
     // Make the shot
-    const hitSmthg = this.enemyBoard.receiveAttack(pos);
+    const hitSmthg = this.board.receiveAttack(pos);
 
     return hitSmthg;
   };
@@ -25,15 +25,15 @@ export const Player = function (name, enemyBoard, IA) {
     let playing = true;
     while (playing) {
       pos = this.rdmCoord();
-      if (enemyBoard.isNotAlreadyFired(pos)) playing = false;
+      if (board.isNotAlreadyFired(pos)) playing = false;
     }
     return pos;
   };
 
   this.rdmCoord = () => {
     /* Pick a random coord (x,y) in the enemy board */
-    const x = Math.floor(Math.random() * this.enemyBoard.dimension);
-    const y = Math.floor(Math.random() * this.enemyBoard.dimension);
+    const x = Math.floor(Math.random() * this.board.dimension);
+    const y = Math.floor(Math.random() * this.board.dimension);
     return [x, y];
   };
 };

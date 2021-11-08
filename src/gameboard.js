@@ -24,13 +24,15 @@ export const Gameboard = function (dimension) {
    */
   this.putShip = (ship, startPos, direction) => {
     // Check if ship is alreay on the board
-    if (this.shipList.includes(ship)) return;
+    if (this.shipList.includes(ship)) return false;
 
     let shipCoordinates = giveShipCoordinates(startPos, direction, ship.size);
     if (this.shipFit(shipCoordinates)) {
       this.addShipToMatrice(ship, shipCoordinates);
       this.shipList.push(ship);
+      return true;
     }
+    return false;
   };
 
   /* At each coord of the matrice, add {ship: ship, portion: n}

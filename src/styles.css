@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: none;
+}
+
+table.game-board {
+  text-align: center;
+  border-collapse: collapse;
+}
+
+table.game-board td {
+  border: 1px solid black;
+  width: 35px;
+  height: 35px;
+}
