@@ -22,6 +22,14 @@ export const Game = function (
   this.boardIDplayerA = boardIDplayerA;
   this.boardIDplayerB = boardIDplayerB;
 
+  this.restartGame = (playerAName, playerBName, ships, IA) => {
+    const boardANode = document.querySelector(`#${this.boardIDplayerA}`);
+    const boardBNode = document.querySelector(`#${this.boardIDplayerB}`);
+    boardANode.remove();
+    boardBNode.remove();
+    this.initGame(playerAName, playerBName, ships, IA);
+  };
+
   /*
    *  Initialize a game with 2 players.
    *  If IA true: the second player is an IA
