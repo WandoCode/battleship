@@ -40,24 +40,23 @@ export const drawShipsOnBoard = function (gameboard, boardID) {
 // Add a class to all cell where a shot has been fired
 export const tagMissedCell = (posList, boardID, classMissed) => {
   // Check eveery position in the list
-  posList.forEach(pos => {
+  posList.forEach((pos) => {
     const cellNode = retreiveCell(pos, boardID);
     // Add the classMissed to the node without that class
-    if (!cellNode.classList.contains(classMissed)){
+    if (!cellNode.classList.contains(classMissed)) {
       cellNode.classList.add(classMissed);
     }
-  }); 
-}
+  });
+};
 
 // Add a class to cell where a ship has been hit
 export const tagHitShip = (pos, boardID, classHit) => {
-  
   const cellNode = retreiveCell(pos, boardID);
   // Add the classMissed to the node without that class
-  if (!cellNode.classList.contains(classHit)){
+  if (!cellNode.classList.contains(classHit)) {
     cellNode.classList.add(classHit);
   }
-}
+};
 
 // Retrive the cell at the given position on the choosen board
 const retreiveCell = function (pos, boardID) {
@@ -65,4 +64,11 @@ const retreiveCell = function (pos, boardID) {
   return cells.querySelector(`[data-coord='${pos[0]}-${pos[1]}']`);
 };
 
+export const displayResults = (winner, parentNode, nodeClass, nodeID) => {
+  const resultsDiv = document.createElement("div");
+  parentNode.appendChild(resultsDiv);
+  if (nodeClass) resultsDiv.classList.add(nodeClass);
+  if (nodeID) resultsDiv.id = nodeID;
 
+  resultsDiv.innerText = `${winner} win!`;
+};

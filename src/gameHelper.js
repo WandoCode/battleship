@@ -1,7 +1,7 @@
 import { Gameboard } from "./gameboard";
 import { Player } from "./player";
 import { MakeShip } from "./ship";
-import { tagMissedCell, tagHitShip } from "./display";
+import { tagMissedCell, tagHitShip, displayResults } from "./display";
 
 export const Game = function (dimension) {
   this.currentPlayer;
@@ -105,45 +105,62 @@ export const Game = function (dimension) {
   };
 
   // Play a round at the given coord and draw the result on the given board
-  this.playARound = (cellCoord, boardID) => {
-
+  this.playARound = (cellCoord, boardID, winnerNode) => {
     // Look if the shot hit a ship
     const hasHit = this.currentPlayer.play(cellCoord);
     if (hasHit) {
       // Look if the game is over
-      if (this.checkGameOver()){
-        console.log("Game is over. Code a screen for that!")
+      if (this.checkGameOver()) {
+        displayResults(
+          this.currentPlayer.name,
+          winnerNode,
+          "winner",
+          "winner-screen"
+        );
       }
       // Update board display
-      tagHitShip(cellCoord, boardID, 'hit');
-      tagMissedCell(this.currentPlayer.enemyBoard.firedPositions, boardID, 'missed');
+      tagHitShip(cellCoord, boardID, "hit");
+      tagMissedCell(
+        this.currentPlayer.enemyBoard.firedPositions,
+        boardID,
+        "missed"
+      );
     } else {
       // Update board display
-      tagMissedCell(this.currentPlayer.enemyBoard.firedPositions, boardID, 'missed');
+      tagMissedCell(
+        this.currentPlayer.enemyBoard.firedPositions,
+        boardID,
+        "missed"
+      );
     }
 
     this.nextPlayer();
-  }
+  };
 
   /* Listen the given boardNode to make action depending the cell clicked
-   * The fct use the current player enemyBoard to look up for ships!!! 
+   * The fct use the current player enemyBoard to look up for ships!!!
    */
-  this.listenBoard = (boardIDplayerA, boardIDplayerB) => {
-    document.querySelector(`#${boardIDplayerB}`).addEventListener("click", (e) => {
-      // Get the coord of the cell clicked
-      const cellCoord = this.coordFromDataset(e.target.dataset.coord);
-      
-      // Look if this cell have been shot before
-      if(!this.currentPlayer.enemyBoard.isNotAlreadyFired(cellCoord)){
-        return;
-      }
+  this.listenBoard = (boardIDplayerA, boardIDplayerB, winnerNode) => {
+    document
+      .querySelector(`#${boardIDplayerB}`)
+      .addEventListener("click", (e) => {
+        // If game is over, user can't play
+        if (this.checkGameOver()) return;
 
-      // Play on that cell
-      this.playARound(cellCoord, boardIDplayerB);
+        // Get the coord of the cell clicked
+        const cellCoord = this.coordFromDataset(e.target.dataset.coord);
 
-      // Make IA play
-      this.makeIAPlay(boardIDplayerA);
-    });
+        // Look if this cell have been shot before
+        if (!this.currentPlayer.enemyBoard.isNotAlreadyFired(cellCoord)) {
+          return;
+        }
+
+        // Play on that cell
+        this.playARound(cellCoord, boardIDplayerB, winnerNode);
+
+        // Make IA play
+        this.makeIAPlay(boardIDplayerA, winnerNode);
+      });
   };
 
   // Determine Coord x,y from the dataset clicked
@@ -153,12 +170,11 @@ export const Game = function (dimension) {
   };
 
   // Make IA play
-  this.makeIAPlay = (boardID) => {
-
+  this.makeIAPlay = (boardID, winnerNode) => {
+    // If game is over, IA can't play
+    if (this.checkGameOver()) return;
     const cellCoord = this.currentPlayer.IAChooseCoord();
-    
 
-    this.playARound(cellCoord, boardID);
-  }
-
+    this.playARound(cellCoord, boardID, winnerNode);
+  };
 };
