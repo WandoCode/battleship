@@ -1,17 +1,32 @@
 import { Gameboard } from "./gameboard";
 import { Player } from "./player";
 import { MakeShip } from "./ship";
-import { tagMissedCell, tagHitShip, displayResults } from "./display";
+import {
+  drawABoard,
+  tagMissedCell,
+  tagHitShip,
+  displayResults,
+  drawShipsOnBoard,
+} from "./display";
 
-export const Game = function (dimension) {
+export const Game = function (
+  dimension,
+  gameNode,
+  boardIDplayerA,
+  boardIDplayerB
+) {
   this.currentPlayer;
   this.players;
   this.dimension = dimension;
+  this.gameNode = gameNode;
+  this.boardIDplayerA = boardIDplayerA;
+  this.boardIDplayerB = boardIDplayerB;
+
   /*
    *  Initialize a game with 2 players.
    *  If IA true: the second player is an IA
    */
-  this.initGame = (playerAName, playerBName, IA) => {
+  this.initGame = (playerAName, playerBName, ships, IA) => {
     let playWithIA = IA || false;
     const boardA = new Gameboard(this.dimension);
     const boardB = new Gameboard(this.dimension);
@@ -19,6 +34,35 @@ export const Game = function (dimension) {
     const playerB = new Player(playerBName, boardA, playWithIA);
     this.players = [playerA, playerB];
     this.setFirstPlayer(1);
+
+    // Draw the inital board foar both player
+    drawABoard(
+      this.dimension,
+      this.gameNode,
+      "game-board",
+      this.boardIDplayerA
+    );
+    drawABoard(
+      this.dimension,
+      this.gameNode,
+      "game-board",
+      this.boardIDplayerB
+    );
+    // Initialize the playerA board
+    this.addShipsRdmly(ships);
+
+    // Change player to put his ships
+    this.nextPlayer();
+
+    // Initialize the playerB board
+    this.addShipsRdmly(ships);
+    drawShipsOnBoard(this.currentPlayer.enemyBoard, this.boardIDplayerA);
+
+    // Change player: he is ready to play
+    this.nextPlayer();
+
+    // Listen to player
+    this.listenBoard(this.gameNode);
   };
 
   /* 
@@ -140,9 +184,9 @@ export const Game = function (dimension) {
   /* Listen the given boardNode to make action depending the cell clicked
    * The fct use the current player enemyBoard to look up for ships!!!
    */
-  this.listenBoard = (boardIDplayerA, boardIDplayerB, winnerNode) => {
+  this.listenBoard = (winnerNode) => {
     document
-      .querySelector(`#${boardIDplayerB}`)
+      .querySelector(`#${this.boardIDplayerB}`)
       .addEventListener("click", (e) => {
         // If game is over, user can't play
         if (this.checkGameOver()) return;
@@ -156,10 +200,10 @@ export const Game = function (dimension) {
         }
 
         // Play on that cell
-        this.playARound(cellCoord, boardIDplayerB, winnerNode);
+        this.playARound(cellCoord, this.boardIDplayerB, winnerNode);
 
         // Make IA play
-        this.makeIAPlay(boardIDplayerA, winnerNode);
+        this.makeIAPlay(this.boardIDplayerA, winnerNode);
       });
   };
 
