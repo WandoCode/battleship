@@ -9,10 +9,6 @@ export const Player = function (name, enemyBoard, IA) {
   this.play = (pos) => {
     /* Make a shot and return true if it touched smthg */
 
-    // For IA : choose pos randomly
-    if (this.IA) {
-      pos = this.IAChooseCoord();
-    }
     // Make the shot
     const hitSmthg = this.enemyBoard.receiveAttack(pos);
 

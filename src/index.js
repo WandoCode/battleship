@@ -1,4 +1,4 @@
-import { drawABoard, drawShipsOnBoard, listenBoard } from "./display";
+import { drawABoard, drawShipsOnBoard } from "./display";
 import { Game } from "./gameHelper";
 import "./styles.css";
 
@@ -20,22 +20,18 @@ drawABoard(BOARD_DIMENSION, body, "game-board", boardIDplayerB);
 
 // Initialize the playerA board
 game.addShipsRdmly(SHIPS);
-drawShipsOnBoard(game.currentPlayer.enemyBoard, boardIDplayerB);
+
 //Listen the board of the other player as the player play on the other player board
-listenBoard(boardIDplayerB, game.currentPlayer);
 
 // Change player to put his ships
 game.nextPlayer();
 
-// Initialize the playerA board
+// Initialize the playerB board
 game.addShipsRdmly(SHIPS);
 drawShipsOnBoard(game.currentPlayer.enemyBoard, boardIDplayerA);
 
 // Change player: he is ready to play
 game.nextPlayer();
 
-// Main loop
-let playing = false;
-while (playing) {
-  playing = !game.checkGameOver();
-}
+game.listenBoard(boardIDplayerA, boardIDplayerB)
+

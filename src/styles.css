@@ -19,3 +19,19 @@ table.game-board div {
   width: 35px;
   height: 35px;
 }
+
+#board-player-B div.missed {
+  background-color: black;
+}
+
+#board-player-A div.missed {
+  background-color: gray;
+}
+
+#board-player-A div.hit {
+  background-color: red;
+}
+
+#board-player-B div.hit {
+  background-color: rgb(148, 71, 71);
+}

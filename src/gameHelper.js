@@ -1,6 +1,7 @@
 import { Gameboard } from "./gameboard";
 import { Player } from "./player";
 import { MakeShip } from "./ship";
+import { tagMissedCell, tagHitShip } from "./display";
 
 export const Game = function (dimension) {
   this.currentPlayer;
@@ -86,6 +87,7 @@ export const Game = function (dimension) {
           let shipCoord;
           let shipDir;
           let shipIsOnTheBoard = false;
+          // Try to put the ship until it's done
           while (!shipIsOnTheBoard) {
             // Choose rdm coord and direction
             shipCoord = this.rdmCoord();
@@ -101,4 +103,62 @@ export const Game = function (dimension) {
       }
     }
   };
+
+  // Play a round at the given coord and draw the result on the given board
+  this.playARound = (cellCoord, boardID) => {
+
+    // Look if the shot hit a ship
+    const hasHit = this.currentPlayer.play(cellCoord);
+    if (hasHit) {
+      // Look if the game is over
+      if (this.checkGameOver()){
+        console.log("Game is over. Code a screen for that!")
+      }
+      // Update board display
+      tagHitShip(cellCoord, boardID, 'hit');
+      tagMissedCell(this.currentPlayer.enemyBoard.firedPositions, boardID, 'missed');
+    } else {
+      // Update board display
+      tagMissedCell(this.currentPlayer.enemyBoard.firedPositions, boardID, 'missed');
+    }
+
+    this.nextPlayer();
+  }
+
+  /* Listen the given boardNode to make action depending the cell clicked
+   * The fct use the current player enemyBoard to look up for ships!!! 
+   */
+  this.listenBoard = (boardIDplayerA, boardIDplayerB) => {
+    document.querySelector(`#${boardIDplayerB}`).addEventListener("click", (e) => {
+      // Get the coord of the cell clicked
+      const cellCoord = this.coordFromDataset(e.target.dataset.coord);
+      
+      // Look if this cell have been shot before
+      if(!this.currentPlayer.enemyBoard.isNotAlreadyFired(cellCoord)){
+        return;
+      }
+
+      // Play on that cell
+      this.playARound(cellCoord, boardIDplayerB);
+
+      // Make IA play
+      this.makeIAPlay(boardIDplayerA);
+    });
+  };
+
+  // Determine Coord x,y from the dataset clicked
+  this.coordFromDataset = (dataset) => {
+    let dataArray = dataset.split("-");
+    return [parseInt(dataArray[0]), parseInt(dataArray[1])];
+  };
+
+  // Make IA play
+  this.makeIAPlay = (boardID) => {
+
+    const cellCoord = this.currentPlayer.IAChooseCoord();
+    
+
+    this.playARound(cellCoord, boardID);
+  }
+
 };
