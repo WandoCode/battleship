@@ -23,10 +23,7 @@ export const Game = function (
   this.boardIDplayerB = boardIDplayerB;
 
   this.restartGame = (playerAName, playerBName, ships, IA) => {
-    const boardANode = document.querySelector(`#${this.boardIDplayerA}`);
-    const boardBNode = document.querySelector(`#${this.boardIDplayerB}`);
-    boardANode.remove();
-    boardBNode.remove();
+    this.gameNode.innerHTML = ""; 
     this.initGame(playerAName, playerBName, ships, IA);
   };
 
@@ -43,18 +40,27 @@ export const Game = function (
     this.players = [playerA, playerB];
     this.setFirstPlayer(1);
 
-    // Draw the inital board foar both player
+    // Draw the inital board for the 1st player
     drawABoard(
       this.dimension,
       this.gameNode,
       "game-board",
-      this.boardIDplayerA
+      this.boardIDplayerA,
+      playerAName
     );
+
+    // Add a line between the 2 boardgame to make a separation
+    const separation = document.createElement('div');
+    separation.id = "separation"
+    this.gameNode.appendChild(separation);
+
+    // Draw the inital board for the 2nd player
     drawABoard(
       this.dimension,
       this.gameNode,
       "game-board",
-      this.boardIDplayerB
+      this.boardIDplayerB,
+      playerBName
     );
     // Initialize the playerA board
     this.addShipsRdmly(ships);

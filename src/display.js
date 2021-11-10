@@ -1,6 +1,21 @@
-export const drawABoard = function (dimension, parentNode, nodeClass, nodeID) {
+export const drawABoard = function (dimension, parentNode, nodeClass, nodeID, playerName) {
+  const side = document.createElement('div');
+  parentNode.appendChild(side);
+  side.id = `side-${nodeID}`;
+  
+  // Add the name of the player
+  const nameText = document.createElement('H2');
+  side.appendChild(nameText);
+  nameText.innerText = playerName;
+  nameText.classList.add('side')
+  
+  // Add the gaming board
+  const outerTable = document.createElement('div');
+  side.appendChild(outerTable);
+  outerTable.className = "outer-table";
+
   const tableBoard = document.createElement("table");
-  parentNode.appendChild(tableBoard);
+  outerTable.appendChild(tableBoard);
   const bodyBoard = document.createElement("tbody");
   tableBoard.appendChild(bodyBoard);
 
@@ -31,7 +46,8 @@ export const drawShipsOnBoard = function (gameboard, boardID) {
   for (let i = 0; i < gameboard.dimension; i++) {
     for (let j = 0; j < gameboard.dimension; j++) {
       if (gameboard.board[i][j] !== null) {
-        retreiveCell([i, j], boardID).innerText = "x";
+        const cell = retreiveCell([i, j], boardID);
+        cell.classList.add('show-ship');
       }
     }
   }
